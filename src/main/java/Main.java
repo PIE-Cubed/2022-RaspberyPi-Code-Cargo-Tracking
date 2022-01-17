@@ -93,6 +93,7 @@ public final class Main {
    */
   private Main() {
     //Resets the variables
+    centerX    = 0;
     emptyCount = 0;
   }
 
