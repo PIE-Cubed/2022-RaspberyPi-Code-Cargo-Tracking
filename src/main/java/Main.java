@@ -2,9 +2,10 @@
  * Raspberry Pi Code for FRC Team 2199.
  * @author Alex and Allwyn Pereira
  */
-import java.io.IOException;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
+
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -246,9 +247,16 @@ public final class Main {
       cameras.add(startCamera(cameraConfig));
     }
 
-    // start image processing on camera 0 if present
+    // Gets the target color from a sendable chooser on the dashboard
+    //NetworkTableEntry targetColor = table.getEntry("Target Color");
+    //String color = targetColor.toString();
+    String color = "red";
+    
+    CargoTracking.setTargetColor(color);
+
+    // Start image processing on camera 0 if present
     if (cameras.size() >= 1) {
-      VisionThread visionThread = new VisionThread(cameras.get(0), new BlueCargoTracking(), pipeline -> {
+      VisionThread visionThread = new VisionThread(cameras.get(0), new CargoTracking(), pipeline -> {
         //NetworkTableEntry isEmpty = table.getEntry("IsEmpty");
         //isEmpty.setBoolean(pipeline.filterContoursOutput().isEmpty());
 
