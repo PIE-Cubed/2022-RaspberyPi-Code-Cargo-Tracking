@@ -248,7 +248,7 @@ public final class Main {
 
     // start image processing on camera 0 if present
     if (cameras.size() >= 1) {
-      VisionThread visionThread = new VisionThread(cameras.get(0), new RedCargoTracking(), pipeline -> {
+      VisionThread visionThread = new VisionThread(cameras.get(0), new BlueCargoTracking(), pipeline -> {
         //NetworkTableEntry isEmpty = table.getEntry("IsEmpty");
         //isEmpty.setBoolean(pipeline.filterContoursOutput().isEmpty());
 

@@ -23,23 +23,23 @@
       <edu.wpi.grip.core.sockets.InputSocketImpl step="1" socket="0"/>
       <edu.wpi.grip.core.sockets.InputSocketImpl step="1" socket="1">
         <value>
-          <double>149.0557553956835</double>
-          <double>255.0</double>
+          <double>0.0</double>
+          <double>186.31313131313132</double>
         </value>
       </edu.wpi.grip.core.sockets.InputSocketImpl>
       <edu.wpi.grip.core.sockets.InputSocketImpl step="1" socket="2">
         <value>
           <double>0.0</double>
-          <double>207.77777777777777</double>
+          <double>255.0</double>
         </value>
       </edu.wpi.grip.core.sockets.InputSocketImpl>
       <edu.wpi.grip.core.sockets.InputSocketImpl step="1" socket="3">
         <value>
-          <double>0.0</double>
-          <double>184.1666666666667</double>
+          <double>135.29676258992805</double>
+          <double>255.0</double>
         </value>
       </edu.wpi.grip.core.sockets.InputSocketImpl>
-      <edu.wpi.grip.core.sockets.OutputSocketImpl step="1" socket="0" previewed="false"/>
+      <edu.wpi.grip.core.sockets.OutputSocketImpl step="1" socket="0" previewed="true"/>
     </edu.wpi.grip.core.Step>
     <edu.wpi.grip.core.Step name="CV erode">
       <edu.wpi.grip.core.sockets.InputSocketImpl step="2" socket="0"/>
@@ -75,20 +75,20 @@
         <value>0.0</value>
       </edu.wpi.grip.core.sockets.InputSocketImpl>
       <edu.wpi.grip.core.sockets.InputSocketImpl step="5" socket="3">
-        <value>40.0</value>
+        <value>0.0</value>
       </edu.wpi.grip.core.sockets.InputSocketImpl>
       <edu.wpi.grip.core.sockets.InputSocketImpl step="5" socket="4">
         <value>1000.0</value>
       </edu.wpi.grip.core.sockets.InputSocketImpl>
       <edu.wpi.grip.core.sockets.InputSocketImpl step="5" socket="5">
-        <value>40.0</value>
+        <value>0.0</value>
       </edu.wpi.grip.core.sockets.InputSocketImpl>
       <edu.wpi.grip.core.sockets.InputSocketImpl step="5" socket="6">
         <value>1000.0</value>
       </edu.wpi.grip.core.sockets.InputSocketImpl>
       <edu.wpi.grip.core.sockets.InputSocketImpl step="5" socket="7">
         <value>
-          <double>50.35971223021583</double>
+          <double>80.03597122302158</double>
           <int>100</int>
         </value>
       </edu.wpi.grip.core.sockets.InputSocketImpl>
@@ -113,6 +113,18 @@
       <edu.wpi.grip.core.sockets.InputSocketImpl step="3" socket="1"/>
     </edu.wpi.grip.core.Connection>
     <edu.wpi.grip.core.Connection>
+      <edu.wpi.grip.core.sockets.OutputSocketImpl step="2" socket="0" previewed="false"/>
+      <edu.wpi.grip.core.sockets.InputSocketImpl step="4" socket="0"/>
+    </edu.wpi.grip.core.Connection>
+    <edu.wpi.grip.core.Connection>
+      <edu.wpi.grip.core.sockets.OutputSocketImpl source="0" socket="0" previewed="false"/>
+      <edu.wpi.grip.core.sockets.InputSocketImpl step="0" socket="0"/>
+    </edu.wpi.grip.core.Connection>
+    <edu.wpi.grip.core.Connection>
+      <edu.wpi.grip.core.sockets.OutputSocketImpl step="1" socket="0" previewed="true"/>
+      <edu.wpi.grip.core.sockets.InputSocketImpl step="2" socket="0"/>
+    </edu.wpi.grip.core.Connection>
+    <edu.wpi.grip.core.Connection>
       <edu.wpi.grip.core.sockets.OutputSocketImpl step="4" socket="0" previewed="true"/>
       <edu.wpi.grip.core.sockets.InputSocketImpl step="5" socket="0"/>
     </edu.wpi.grip.core.Connection>
@@ -121,20 +133,8 @@
       <edu.wpi.grip.core.sockets.InputSocketImpl step="3" socket="0"/>
     </edu.wpi.grip.core.Connection>
     <edu.wpi.grip.core.Connection>
-      <edu.wpi.grip.core.sockets.OutputSocketImpl source="0" socket="0" previewed="false"/>
-      <edu.wpi.grip.core.sockets.InputSocketImpl step="0" socket="0"/>
-    </edu.wpi.grip.core.Connection>
-    <edu.wpi.grip.core.Connection>
-      <edu.wpi.grip.core.sockets.OutputSocketImpl step="1" socket="0" previewed="false"/>
-      <edu.wpi.grip.core.sockets.InputSocketImpl step="2" socket="0"/>
-    </edu.wpi.grip.core.Connection>
-    <edu.wpi.grip.core.Connection>
       <edu.wpi.grip.core.sockets.OutputSocketImpl step="0" socket="0" previewed="true"/>
       <edu.wpi.grip.core.sockets.InputSocketImpl step="1" socket="0"/>
-    </edu.wpi.grip.core.Connection>
-    <edu.wpi.grip.core.Connection>
-      <edu.wpi.grip.core.sockets.OutputSocketImpl step="2" socket="0" previewed="false"/>
-      <edu.wpi.grip.core.sockets.InputSocketImpl step="4" socket="0"/>
     </edu.wpi.grip.core.Connection>
   </connections>
   <settings>
@@ -148,7 +148,7 @@
   </settings>
   <codeGenerationSettings>
     <language>Java</language>
-    <className>RedCargoTracking</className>
+    <className>BlueCargoTracking</className>
     <implementWpilibPipeline>true</implementWpilibPipeline>
     <saveDir>C:\Users\Robo Lions\Documents</saveDir>
     <packageName></packageName>
