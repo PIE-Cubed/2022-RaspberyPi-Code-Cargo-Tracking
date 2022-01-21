@@ -110,7 +110,7 @@ public final class Main {
   public static boolean readCameraConfig(JsonObject config) {
     CameraConfig cam = new CameraConfig();
 
-    // name
+    // Name
     JsonElement nameElement = config.get("name");
     if (nameElement == null) {
       parseError("could not read camera name");
@@ -118,7 +118,7 @@ public final class Main {
     }
     cam.name = nameElement.getAsString();
 
-    // path
+    // Path
     JsonElement pathElement = config.get("path");
     if (pathElement == null) {
       parseError("camera '" + cam.name + "': could not read path");
@@ -126,7 +126,7 @@ public final class Main {
     }
     cam.path = pathElement.getAsString();
 
-    // stream properties
+    // Stream properties
     cam.streamConfig = config.get("stream");
 
     cam.config = config;
@@ -149,14 +149,14 @@ public final class Main {
       return false;
     }
 
-    // top level must be an object
+    // Top level must be an object
     if (!top.isJsonObject()) {
       parseError("must be JSON object");
       return false;
     }
     JsonObject obj = top.getAsJsonObject();
 
-    // team number
+    // Team number
     JsonElement teamElement = obj.get("team");
     if (teamElement == null) {
       parseError("could not read team number");
@@ -176,7 +176,7 @@ public final class Main {
       }
     }
 
-    // cameras
+    // Cameras
     JsonElement camerasElement = obj.get("cameras");
     if (camerasElement == null) {
       parseError("could not read cameras");
