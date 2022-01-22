@@ -2,8 +2,8 @@
  * Raspberry Pi Code for FRC Team 2199.
  * @author Alex and Allwyn Pereira
  */
-import java.io.FileWriter;
-import java.io.BufferedWriter;
+//import java.io.FileWriter;
+//import java.io.BufferedWriter;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,8 +22,8 @@ import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.cameraserver.CameraServer;
-//import edu.wpi.first.networktables.*;
 import edu.wpi.first.vision.VisionThread;
+import edu.wpi.first.networktables.*;
 
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -85,7 +85,7 @@ public final class Main {
   private static double centerX;
   private static final Object imgLock = new Object();
 
-  //private static NetworkTable table;
+  private static NetworkTable table;
 
   private static double emptyCount = 0;
 
@@ -228,10 +228,10 @@ public final class Main {
     }
 
     //Create a buffered file writer (rPi must be in writable mode for this to work)
-    BufferedWriter writer = new BufferedWriter(new FileWriter("NetworkTable.txt"));
+    //BufferedWriter writer = new BufferedWriter(new FileWriter("NetworkTable.txt"));
     
     // Start the NetworkTables instance
-    /*NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
+    NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
     if (server) {
       System.out.println("Setting up NetworkTables server");
       ntinst.startServer();
@@ -239,7 +239,7 @@ public final class Main {
       System.out.println("Setting up NetworkTables client for team " + team);
       ntinst.startClientTeam(team);
     }
-    table = ntinst.getTable("TrackingValues");*/
+    table = ntinst.getTable("TrackingValues");
     
     // Start Cameras
     List<VideoSource> cameras = new ArrayList<>();
@@ -248,17 +248,17 @@ public final class Main {
     }
 
     // Gets the target color from a sendable chooser on the dashboard
-    //NetworkTableEntry targetColor = table.getEntry("Target Color");
-    //String color = targetColor.toString();
-    String color = "red";
+    NetworkTableEntry targetColor = table.getEntry("Target Color");
+    String color = targetColor.toString();
+    //String color = "red";
     
-    CargoTracking.setTargetColor(color);
+    CargoTracking.getTargetColor(color);
 
     // Start image processing on camera 0 if present
     if (cameras.size() >= 1) {
       VisionThread visionThread = new VisionThread(cameras.get(0), new CargoTracking(), pipeline -> {
-        //NetworkTableEntry isEmpty = table.getEntry("IsEmpty");
-        //isEmpty.setBoolean(pipeline.filterContoursOutput().isEmpty());
+        NetworkTableEntry isEmpty = table.getEntry("IsEmpty");
+        isEmpty.setBoolean(pipeline.filterContoursOutput().isEmpty());
 
         if (!pipeline.filterContoursOutput().isEmpty()) {
           //Reset emptyCount
@@ -271,27 +271,27 @@ public final class Main {
           //Syncronized link
           synchronized (imgLock) {
             centerX = cameraFOV.x + (cameraFOV.width / 2);                   
-            //NetworkTableEntry target = table.getEntry("CenterX");
-            //target.setDouble( centerX );
+            NetworkTableEntry target = table.getEntry("CenterX");
+            target.setDouble( centerX );
             pipeline.filterContoursOutput().clear();
-            try {
+           /*try {
               writer.write("CenterX : " + centerX + ", Count : " + pipeline.findContoursOutput().size() + "\n");
               writer.flush();
             }
             catch (IOException ioe) {
               ioe.printStackTrace();
-            }
+            }*/
           }
         }
-        /*else {
+        else {
           //Increases the empty count
           emptyCount++;
 
           //Sets the value of the NetwtorkTable Entry
           //NetworkTableEntry empty = table.getEntry("Empty");
           //empty.setDouble( emptyCount );
-        }*/
-        else {
+        }
+        /*else {
           try {
             writer.write("Empty Count: " + emptyCount + "\n");
             emptyCount++;
@@ -300,7 +300,7 @@ public final class Main {
           catch (IOException ioe) {
             ioe.printStackTrace();
           }  
-        }
+        }*/
       });
 
       visionThread.start();

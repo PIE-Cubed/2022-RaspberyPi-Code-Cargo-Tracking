@@ -50,20 +50,137 @@ public class CargoTracking implements VisionPipeline {
 	 * Sets the target color for the pipeline
 	 * @param color
 	 */
-	public static void setTargetColor(String color0) {
+	public static void getTargetColor(String color0) {
 		color = color0;
 	}
 
 	/**
-	 * This is the primary method that runs the entire pipeline and updates the outputs.
+	 * The public method that is called by other methods.
 	 */
 	@Override
 	public void process(Mat source0) {
-		process(source0, color);
+		if ("Red".equalsIgnoreCase(color)) {
+			// Sets the pipeline to target Red Cargo
+			redCargoDetection(source0);
+		}
+		else if ("Blue".equalsIgnoreCase(color)) {
+			// Sets the pipeline to target Blue Cargo
+			blueCargoDetection(source0);
+		}
+		else {
+			// Default case
+			// Does nothing yet...
+		}
 	}
 
-	private void process(Mat source0, String color) {
-		//
+	/**
+	 * This is the primary method that initializes the red cargo pipeline.
+	 * @param source0
+	 */
+	private void redCargoDetection(Mat source0) {
+		// Step CV_resize0:
+		Mat cvResizeSrc = source0;
+		Size cvResizeDsize = new Size(0, 0);
+		double cvResizeFx = 1.0;
+		double cvResizeFy = 1.0;
+		int cvResizeInterpolation = Imgproc.INTER_LINEAR;
+		cvResize(cvResizeSrc, cvResizeDsize, cvResizeFx, cvResizeFy, cvResizeInterpolation, cvResizeOutput);
+
+		// Step RGB_Threshold0:
+		Mat rgbThresholdInput = cvResizeOutput;
+		double[] rgbThresholdRed = {149.0557553956835, 255.0};
+		double[] rgbThresholdGreen = {0.0, 207.77777777777777};
+		double[] rgbThresholdBlue = {0.0, 184.1666666666667};
+		rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
+
+		// Step CV_erode0:
+		Mat cvErodeSrc = rgbThresholdOutput;
+		Mat cvErodeKernel = new Mat();
+		Point cvErodeAnchor = new Point(-1, -1);
+		double cvErodeIterations = 10.0;
+		int cvErodeBordertype = Core.BORDER_CONSTANT;
+		Scalar cvErodeBordervalue = new Scalar(-1);
+		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
+
+		// Step Mask0:
+		Mat maskInput = cvResizeOutput;
+		Mat maskMask = cvErodeOutput;
+		mask(maskInput, maskMask, maskOutput);
+
+		// Step Find_Contours0:
+		Mat findContoursInput = cvErodeOutput;
+		boolean findContoursExternalOnly = true;
+		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
+
+		// Step Filter_Contours0:
+		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
+		double filterContoursMinArea = 0.0;
+		double filterContoursMinPerimeter = 0.0;
+		double filterContoursMinWidth = 40.0;
+		double filterContoursMaxWidth = 1000.0;
+		double filterContoursMinHeight = 40.0;
+		double filterContoursMaxHeight = 1000.0;
+		double[] filterContoursSolidity = {50.35971223021583, 100};
+		double filterContoursMaxVertices = 1000000.0;
+		double filterContoursMinVertices = 45.0;
+		double filterContoursMinRatio = 0.0;
+		double filterContoursMaxRatio = 1000.0;
+		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
+	}
+
+	/**
+	 * This is the primary method that initializes the blue cargo pipeline.
+	 * @param source0
+	 */
+	private void blueCargoDetection(Mat source0) {
+		// Step CV_resize0:
+		Mat cvResizeSrc = source0;
+		Size cvResizeDsize = new Size(0, 0);
+		double cvResizeFx = 1.0;
+		double cvResizeFy = 1.0;
+		int cvResizeInterpolation = Imgproc.INTER_LINEAR;
+		cvResize(cvResizeSrc, cvResizeDsize, cvResizeFx, cvResizeFy, cvResizeInterpolation, cvResizeOutput);
+
+		// Step RGB_Threshold0:
+		Mat rgbThresholdInput = cvResizeOutput;
+		double[] rgbThresholdRed = {0.0, 186.31313131313132};
+		double[] rgbThresholdGreen = {0.0, 255.0};
+		double[] rgbThresholdBlue = {135.29676258992805, 255.0};
+		rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
+
+		// Step CV_erode0:
+		Mat cvErodeSrc = rgbThresholdOutput;
+		Mat cvErodeKernel = new Mat();
+		Point cvErodeAnchor = new Point(-1, -1);
+		double cvErodeIterations = 10.0;
+		int cvErodeBordertype = Core.BORDER_CONSTANT;
+		Scalar cvErodeBordervalue = new Scalar(-1);
+		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
+
+		// Step Mask0:
+		Mat maskInput = cvResizeOutput;
+		Mat maskMask = cvErodeOutput;
+		mask(maskInput, maskMask, maskOutput);
+
+		// Step Find_Contours0:
+		Mat findContoursInput = cvErodeOutput;
+		boolean findContoursExternalOnly = true;
+		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
+
+		// Step Filter_Contours0:
+		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
+		double filterContoursMinArea = 0.0;
+		double filterContoursMinPerimeter = 0.0;
+		double filterContoursMinWidth = 0.0;
+		double filterContoursMaxWidth = 1000.0;
+		double filterContoursMinHeight = 0.0;
+		double filterContoursMaxHeight = 1000.0;
+		double[] filterContoursSolidity = {80.03597122302158, 100};
+		double filterContoursMaxVertices = 1000000.0;
+		double filterContoursMinVertices = 45.0;
+		double filterContoursMinRatio = 0.0;
+		double filterContoursMaxRatio = 1000.0;
+		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 	}
 
 	/**
