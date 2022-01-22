@@ -271,9 +271,12 @@ public final class Main {
           //Syncronized link
           synchronized (imgLock) {
             centerX = cameraFOV.x + (cameraFOV.width / 2);                   
+            
             NetworkTableEntry target = table.getEntry("CenterX");
             target.setDouble( centerX );
+
             pipeline.filterContoursOutput().clear();
+
            /*try {
               writer.write("CenterX : " + centerX + ", Count : " + pipeline.findContoursOutput().size() + "\n");
               writer.flush();
@@ -288,8 +291,8 @@ public final class Main {
           emptyCount++;
 
           //Sets the value of the NetwtorkTable Entry
-          //NetworkTableEntry empty = table.getEntry("Empty");
-          //empty.setDouble( emptyCount );
+          NetworkTableEntry empty = table.getEntry("Empty");
+          empty.setDouble( emptyCount );
         }
         /*else {
           try {
