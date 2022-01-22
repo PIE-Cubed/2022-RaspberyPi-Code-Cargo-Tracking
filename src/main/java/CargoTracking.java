@@ -2,10 +2,10 @@
  * Raspberry Pi Code for FRC Team 2199.
  * @author Alex and Allwyn Pereira
  */
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.wpi.first.vision.VisionPipeline;
+
+import java.util.List;
+import java.util.ArrayList;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.*;
