@@ -248,7 +248,7 @@ public final class Main {
     }
 
     // Gets the target color from a sendable chooser on the dashboard
-    NetworkTableEntry targetColor = table.getEntry("Target Color");
+    NetworkTableEntry targetColor = table.getEntry("TargetColor");
     String color = targetColor.toString();
     //String color = "red";
     
