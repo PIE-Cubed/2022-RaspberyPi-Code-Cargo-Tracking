@@ -18,7 +18,6 @@ import org.opencv.imgproc.*;
 * @author GRIP
 */
 public class CargoTracking implements VisionPipeline {
-
 	//Outputs
 	private Mat cvResizeOutput = new Mat();
 	private Mat rgbThresholdOutput = new Mat();
@@ -28,6 +27,7 @@ public class CargoTracking implements VisionPipeline {
 	private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
 
 	//Default Variables
+	static String color;
 	static double[] rgbThresholdRed = {0,255.0};
 	static double[] rgbThresholdGreen = {0.0, 255.0};
 	static double[] rgbThresholdBlue = {0.0, 255.0};
@@ -50,23 +50,8 @@ public class CargoTracking implements VisionPipeline {
 	 * Sets the target color for the pipeline
 	 * @param color
 	 */
-	public static void setTargetColor(String color) {
-		if (color == "red" || color == "Red") {
-			// Configures the method to track Red Cargo
-			rgbThresholdRed = rgbThresholdRed_RedCargo;
-			rgbThresholdGreen = rgbThresholdGreen_RedCargo;
-			rgbThresholdBlue = rgbThresholdBlue_RedCargo;
-		}
-		else if (color == "blue" || color == "Blue") {
-			// Configures the method to track Blue Cargo
-			rgbThresholdRed = rgbThresholdRed_BlueCargo;
-			rgbThresholdGreen = rgbThresholdGreen_BlueCargo;
-			rgbThresholdBlue = rgbThresholdBlue_BlueCargo;
-		}
-		else {
-			//Default case
-			//Do nothing the values are already set to something useless
-		}
+	public static void setTargetColor(String color0) {
+		color = color0;
 	}
 
 	/**
@@ -74,58 +59,11 @@ public class CargoTracking implements VisionPipeline {
 	 */
 	@Override
 	public void process(Mat source0) {
-		// Step CV_resize0:
-		Mat cvResizeSrc = source0;
-		Size cvResizeDsize = new Size(0, 0);
-		double cvResizeFx = 1.0;
-		double cvResizeFy = 1.0;
-		int cvResizeInterpolation = Imgproc.INTER_LINEAR;
-		cvResize(cvResizeSrc, cvResizeDsize, cvResizeFx, cvResizeFy, cvResizeInterpolation, cvResizeOutput);
+		process(source0, color);
+	}
 
-		// Step RGB_Threshold0:
-		Mat rgbThresholdInput = cvResizeOutput;
-		/**
-		 * These values are for Red Ball detection
-		 * double[] rgbThresholdRed = {149.0557553956835, 255.0};
-		 * double[] rgbThresholdGreen = {0.0, 207.77777777777777};
-		 * double[] rgbThresholdBlue = {0.0, 184.1666666666667};
-		 */
-		rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
-
-		// Step CV_erode0:
-		Mat cvErodeSrc = rgbThresholdOutput;
-		Mat cvErodeKernel = new Mat();
-		Point cvErodeAnchor = new Point(-1, -1);
-		double cvErodeIterations = 10.0;
-		int cvErodeBordertype = Core.BORDER_CONSTANT;
-		Scalar cvErodeBordervalue = new Scalar(-1);
-		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
-
-		// Step Mask0:
-		Mat maskInput = cvResizeOutput;
-		Mat maskMask = cvErodeOutput;
-		mask(maskInput, maskMask, maskOutput);
-
-		// Step Find_Contours0:
-		Mat findContoursInput = cvErodeOutput;
-		boolean findContoursExternalOnly = true;
-		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
-
-		// Step Filter_Contours0:
-		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-		double filterContoursMinArea = 0.0;
-		double filterContoursMinPerimeter = 0.0;
-		double filterContoursMinWidth = 0.0;
-		double filterContoursMaxWidth = 1000.0;
-		double filterContoursMinHeight = 0.0;
-		double filterContoursMaxHeight = 1000.0;
-		double[] filterContoursSolidity = {80.03597122302158, 100};
-		double filterContoursMaxVertices = 1000000.0;
-		double filterContoursMinVertices = 45.0;
-		double filterContoursMinRatio = 0.0;
-		double filterContoursMaxRatio = 1000.0;
-		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
-
+	private void process(Mat source0, String color) {
+		//
 	}
 
 	/**
