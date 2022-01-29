@@ -249,14 +249,14 @@ public final class Main {
 
     // Gets the target color from a sendable chooser on the dashboard
     NetworkTableEntry targetColor = table.getEntry("TargetColor");
-    String color = targetColor.toString();
+    String color0 = targetColor.toString();
     //String color = "red";
     
-    CargoTracking.getTargetColor(color);
+    CargoTracking.setTargetColor(color0);
 
     // Start image processing on camera 0 if present
     if (cameras.size() >= 1) {
-      VisionThread visionThread = new VisionThread(cameras.get(0), new CargoTracking(), pipeline -> {
+      VisionThread visionThread = new VisionThread(cameras.get(0), new RedCargoTracking(), pipeline -> {
         NetworkTableEntry isEmpty = table.getEntry("IsEmpty");
         isEmpty.setBoolean(pipeline.filterContoursOutput().isEmpty());
 

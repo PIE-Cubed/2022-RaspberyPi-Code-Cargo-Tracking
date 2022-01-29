@@ -40,7 +40,7 @@ public class CargoTracking implements VisionPipeline {
 	 * Sets the target color for the pipeline
 	 * @param color
 	 */
-	public static void getTargetColor(String color0) {
+	public static void setTargetColor(String color0) {
 		color = color0;
 	}
 
