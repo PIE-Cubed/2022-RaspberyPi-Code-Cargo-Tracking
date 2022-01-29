@@ -32,16 +32,6 @@ public class CargoTracking implements VisionPipeline {
 	static double[] rgbThresholdGreen = {0.0, 255.0};
 	static double[] rgbThresholdBlue = {0.0, 255.0};
 
-	//Red Cargo Variables
-	static double[] rgbThresholdRed_RedCargo = {149.0557553956835, 255.0};
-	static double[] rgbThresholdGreen_RedCargo = {0.0, 207.77777777777777};
-	static double[] rgbThresholdBlue_RedCargo = {0.0, 184.1666666666667};
-	
-	//Blue Cargo Variables
-	static double[] rgbThresholdRed_BlueCargo = {0.0, 186.31313131313132};
-	static double[] rgbThresholdGreen_BlueCargo = {0.0, 255.0};
-	static double[] rgbThresholdBlue_BlueCargo = {135.29676258992805, 255.0};
-
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
@@ -74,7 +64,7 @@ public class CargoTracking implements VisionPipeline {
 	}
 
 	/**
-	 * This is the primary method that initializes the red cargo pipeline.
+	 * This is the primary method that initializes red cargo detection.
 	 * @param source0
 	 */
 	private void redCargoDetection(Mat source0) {
@@ -129,7 +119,7 @@ public class CargoTracking implements VisionPipeline {
 	}
 
 	/**
-	 * This is the primary method that initializes the blue cargo pipeline.
+	 * This is the primary method that initializes blue cargo detection.
 	 * @param source0
 	 */
 	private void blueCargoDetection(Mat source0) {
