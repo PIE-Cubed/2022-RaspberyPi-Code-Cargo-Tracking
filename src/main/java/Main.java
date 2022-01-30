@@ -82,18 +82,22 @@ public final class Main {
   public static boolean server;
   public static List<CameraConfig> cameraConfigs = new ArrayList<>();
 
-  private static double centerX;
   private static final Object imgLock = new Object();
 
+  //Network Tables
   //private static NetworkTable table;
 
-  private static double emptyCount = 0;
+  //Variables
+  private static String color;
+  private static double centerX;
+  private static double emptyCount;
 
   /**
    * Constructor
    */
   private Main() {
     //Resets the variables
+    color      = "blue";
     centerX    = 0;
     emptyCount = 0;
   }
@@ -249,72 +253,137 @@ public final class Main {
 
     // Gets the target color from a sendable chooser on the dashboard
     //NetworkTableEntry targetColor = table.getEntry("TargetColor");
-    //String color = targetColor.toString();
-    String color = "red";
-    
-    CargoTracking.setTargetColor(color);
+    //color = targetColor.toString();
+    color = "red";
 
-    // Start image processing on camera 0 if present
-    if (cameras.size() >= 1) {
-      VisionThread visionThread = new VisionThread(cameras.get(0), new RedCargoTracking(), pipeline -> {
-        //NetworkTableEntry isEmpty = table.getEntry("IsEmpty");
-        //isEmpty.setBoolean(pipeline.filterContoursOutput().isEmpty());
-        boolean isEmpty = pipeline.filterContoursOutput().isEmpty();
-
-        try {
-          writer.write("isEmpty: " + isEmpty + " ");
-          writer.flush();
-        }
-        catch (IOException ioe) {
-          ioe.printStackTrace();
-        }
-
-        if (!pipeline.filterContoursOutput().isEmpty()) {
-          //Reset emptyCount
-          emptyCount = 0;
-
-          //Object tracking
-          Rect cameraFOV = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-          Imgproc.circle(pipeline.maskOutput(), new Point(cameraFOV.x, cameraFOV.y), cameraFOV.width / 2, new Scalar(255, 0, 0));
-          
-          //Syncronized link
-          synchronized (imgLock) {
-            centerX = cameraFOV.x + (cameraFOV.width / 2);                   
+    if ("red".equalsIgnoreCase(color)) {
+      // Start image processing on camera 0 if present
+      if (cameras.size() >= 1) {
+        VisionThread visionThread = new VisionThread(cameras.get(0), new RedCargoTracking(), pipeline -> {
+          //NetworkTableEntry isEmpty = table.getEntry("IsEmpty");
+          //isEmpty.setBoolean(pipeline.filterContoursOutput().isEmpty());
+          boolean isEmpty = pipeline.filterContoursOutput().isEmpty();
+  
+          try {
+            writer.write("isEmpty: " + isEmpty + " ");
+            writer.flush();
+          }
+          catch (IOException ioe) {
+            ioe.printStackTrace();
+          }
+  
+          if (!pipeline.filterContoursOutput().isEmpty()) {
+            //Reset emptyCount
+            emptyCount = 0;
+  
+            //Object tracking
+            Rect cameraFOV = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+            Imgproc.circle(pipeline.maskOutput(), new Point(cameraFOV.x, cameraFOV.y), cameraFOV.width / 2, new Scalar(255, 0, 0));
             
-            //NetworkTableEntry target = table.getEntry("CenterX");
-            //target.setDouble( centerX );
-
-            pipeline.filterContoursOutput().clear();
-
-           try {
-              writer.write("CenterX : " + centerX + ", Count : " + pipeline.findContoursOutput().size() + "\n");
+            //Syncronized link
+            synchronized (imgLock) {
+              centerX = cameraFOV.x + (cameraFOV.width / 2);                   
+              
+              //NetworkTableEntry target = table.getEntry("CenterX");
+              //target.setDouble( centerX );
+  
+              pipeline.filterContoursOutput().clear();
+  
+             try {
+                writer.write("CenterX : " + centerX + ", Count : " + pipeline.findContoursOutput().size() + "\n");
+                writer.flush();
+              }
+              catch (IOException ioe) {
+                ioe.printStackTrace();
+              }
+            }
+          }
+          else {
+            /*//Increases the empty count
+            emptyCount++;
+  
+            //Sets the value of the NetwtorkTable Entry
+            NetworkTableEntry empty = table.getEntry("Empty");
+            empty.setDouble( emptyCount );*/
+  
+            try {
+              writer.write("Empty Count: " + emptyCount + "\n");
+              emptyCount++;
               writer.flush();
             }
             catch (IOException ioe) {
               ioe.printStackTrace();
             }
           }
-        }
-        else {
-          //Increases the empty count
-          emptyCount++;
+        });
+  
+        visionThread.start();
+      }
+    }
 
-          //Sets the value of the NetwtorkTable Entry
-          //NetworkTableEntry empty = table.getEntry("Empty");
-          //empty.setDouble( emptyCount );
+    if ("blue".equalsIgnoreCase(color)) {
+      // Start image processing on camera 0 if present
+      if (cameras.size() >= 1) {
+        VisionThread visionThread = new VisionThread(cameras.get(0), new BlueCargoTracking(), pipeline -> {
+          //NetworkTableEntry isEmpty = table.getEntry("IsEmpty");
+          //isEmpty.setBoolean(pipeline.filterContoursOutput().isEmpty());
+          boolean isEmpty = pipeline.filterContoursOutput().isEmpty();
 
           try {
-            writer.write("Empty Count: " + emptyCount + "\n");
-            emptyCount++;
+            writer.write("isEmpty: " + isEmpty + " ");
             writer.flush();
           }
           catch (IOException ioe) {
             ioe.printStackTrace();
           }
-        }
-      });
 
-      visionThread.start();
+          if (!pipeline.filterContoursOutput().isEmpty()) {
+            //Reset emptyCount
+            emptyCount = 0;
+
+            //Object tracking
+            Rect cameraFOV = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+            Imgproc.circle(pipeline.maskOutput(), new Point(cameraFOV.x, cameraFOV.y), cameraFOV.width / 2, new Scalar(255, 0, 0));
+            
+            //Syncronized link
+            synchronized (imgLock) {
+              centerX = cameraFOV.x + (cameraFOV.width / 2);                   
+              
+              //NetworkTableEntry target = table.getEntry("CenterX");
+              //target.setDouble( centerX );
+
+              pipeline.filterContoursOutput().clear();
+
+            try {
+                writer.write("CenterX : " + centerX + ", Count : " + pipeline.findContoursOutput().size() + "\n");
+                writer.flush();
+              }
+              catch (IOException ioe) {
+                ioe.printStackTrace();
+              }
+            }
+          }
+          else {
+            /*//Increases the empty count
+            emptyCount++;
+
+            //Sets the value of the NetwtorkTable Entry
+            NetworkTableEntry empty = table.getEntry("Empty");
+            empty.setDouble( emptyCount );*/
+
+            try {
+              writer.write("Empty Count: " + emptyCount + "\n");
+              emptyCount++;
+              writer.flush();
+            }
+            catch (IOException ioe) {
+              ioe.printStackTrace();
+            }
+          }
+        });
+
+        visionThread.start();
+      }
     }
 
     // loop forever
