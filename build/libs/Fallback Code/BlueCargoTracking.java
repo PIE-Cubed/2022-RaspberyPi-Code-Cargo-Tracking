@@ -17,7 +17,7 @@ import org.opencv.imgproc.*;
 *
 * @author GRIP
 */
-public class BlueCargotracking implements VisionPipeline {
+public class BlueCargoTracking implements VisionPipeline {
 
 	//Outputs
 	private Mat cvResizeOutput = new Mat();
