@@ -88,7 +88,6 @@ public final class Main {
   private static NetworkTable table;
 
   //Variables
-  private static String color;
   private static double centerX;
   private static double emptyCount;
 
@@ -97,7 +96,6 @@ public final class Main {
    */
   private Main() {
     //Resets the variables
-    color      = "default";
     centerX    = 0;
     emptyCount = 0;
   }
@@ -251,12 +249,11 @@ public final class Main {
       cameras.add(startCamera(cameraConfig));
     }
 
-    // Gets the target color from a sendable chooser on the dashboard
-    NetworkTableEntry targetColor = table.getEntry("TargetColor");
-    color = targetColor.toString();
-    //color = "red";
+    // Determines if we are red from FMS info
+    NetworkTableEntry targetColor = table.getEntry("isRedAlliance");
+    boolean isRedAlliance = targetColor.getBoolean(false);
 
-    if ("red".equalsIgnoreCase(color)) {
+    if (isRedAlliance == true) {
       // Start image processing on camera 0 if present
       if (cameras.size() >= 1) {
         VisionThread visionThread = new VisionThread(cameras.get(0), new RedCargoTracking(), pipeline -> {
@@ -320,8 +317,7 @@ public final class Main {
         visionThread.start();
       }
     }
-
-    if ("blue".equalsIgnoreCase(color)) {
+    else if (isRedAlliance == false) {
       // Start image processing on camera 0 if present
       if (cameras.size() >= 1) {
         VisionThread visionThread = new VisionThread(cameras.get(0), new BlueCargoTracking(), pipeline -> {
