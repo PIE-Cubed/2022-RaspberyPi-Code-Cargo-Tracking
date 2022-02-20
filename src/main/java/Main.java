@@ -257,10 +257,9 @@ public final class Main {
         VisionThread visionThread = new VisionThread(cameras.get(0), new RedCargoTracking(), pipeline -> {
           NetworkTableEntry isEmpty = table.getEntry("IsEmpty");
           isEmpty.setBoolean(pipeline.filterContoursOutput().isEmpty());
-          //boolean isEmpty = pipeline.filterContoursOutput().isEmpty();
   
           /*try {
-            writer.write("isEmpty: " + isEmpty + " ");
+            writer.write("isEmpty: " + pipeline.filterContoursOutput().isEmpty() + " ");
             writer.flush();
           }
           catch (IOException ioe) {
@@ -321,10 +320,9 @@ public final class Main {
         VisionThread visionThread = new VisionThread(cameras.get(0), new BlueCargoTracking(), pipeline -> {
           NetworkTableEntry isEmpty = table.getEntry("IsEmpty");
           isEmpty.setBoolean(pipeline.filterContoursOutput().isEmpty());
-          //boolean isEmpty = pipeline.filterContoursOutput().isEmpty();
 
           /*try {
-            writer.write("isEmpty: " + isEmpty + " ");
+            writer.write("isEmpty: " + pipeline.filterContoursOutput().isEmpty() + " ");
             writer.flush();
           }
           catch (IOException ioe) {
