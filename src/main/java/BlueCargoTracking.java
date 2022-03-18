@@ -19,9 +19,10 @@ public class BlueCargoTracking implements VisionPipeline {
 
 	//Outputs
 	private Mat cvResizeOutput = new Mat();
+	private Mat hsvThresholdOutput = new Mat();
+	private Mat maskOutput = new Mat();
 	private Mat rgbThresholdOutput = new Mat();
 	private Mat cvErodeOutput = new Mat();
-	private Mat maskOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 	private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
 
@@ -32,8 +33,7 @@ public class BlueCargoTracking implements VisionPipeline {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
-	@Override
-	public void process(Mat source0) {
+	@Override	public void process(Mat source0) {
 		// Step CV_resize0:
 		Mat cvResizeSrc = source0;
 		Size cvResizeDsize = new Size(0, 0);
@@ -42,46 +42,54 @@ public class BlueCargoTracking implements VisionPipeline {
 		int cvResizeInterpolation = Imgproc.INTER_LINEAR;
 		cvResize(cvResizeSrc, cvResizeDsize, cvResizeFx, cvResizeFy, cvResizeInterpolation, cvResizeOutput);
 
+		// Step HSV_Threshold0:
+		Mat hsvThresholdInput = cvResizeOutput;
+		double[] hsvThresholdHue = {50.17985611510791, 152.35494880546074};
+		double[] hsvThresholdSaturation = {114.65827338129496, 255.0};
+		double[] hsvThresholdValue = {105.48561151079136, 255.0};
+		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
+
+		// Step Mask0:
+		Mat maskInput = cvResizeOutput;
+		Mat maskMask = hsvThresholdOutput;
+		mask(maskInput, maskMask, maskOutput);
+
 		// Step RGB_Threshold0:
-		Mat rgbThresholdInput = cvResizeOutput;
-		double[] rgbThresholdRed = {0.0, 144.0358361774744};
-		double[] rgbThresholdGreen = {45.86330935251798, 255.0};
-		double[] rgbThresholdBlue = {126.12410071942446, 255.0};
+		Mat rgbThresholdInput = maskOutput;
+		double[] rgbThresholdRed = {20.638489208633093, 163.61774744027304};
+		double[] rgbThresholdGreen = {0.0, 255.0};
+		double[] rgbThresholdBlue = {96.31294964028777, 255.0};
 		rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
 
 		// Step CV_erode0:
 		Mat cvErodeSrc = rgbThresholdOutput;
 		Mat cvErodeKernel = new Mat();
 		Point cvErodeAnchor = new Point(-1, -1);
-		double cvErodeIterations = 7.0;
+		double cvErodeIterations = 2.0;
 		int cvErodeBordertype = Core.BORDER_CONSTANT;
 		Scalar cvErodeBordervalue = new Scalar(-1);
 		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
 
-		// Step Mask0:
-		Mat maskInput = cvResizeOutput;
-		Mat maskMask = cvErodeOutput;
-		mask(maskInput, maskMask, maskOutput);
-
 		// Step Find_Contours0:
 		Mat findContoursInput = cvErodeOutput;
-		boolean findContoursExternalOnly = false;
+		boolean findContoursExternalOnly = true;
 		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
 
 		// Step Filter_Contours0:
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
 		double filterContoursMinArea = 20.0;
-		double filterContoursMinPerimeter = 0.0;
-		double filterContoursMinWidth = 40.0;
-		double filterContoursMaxWidth = 1000.0;
-		double filterContoursMinHeight = 40.0;
-		double filterContoursMaxHeight = 1000.0;
-		double[] filterContoursSolidity = {80.03597122302159, 100};
-		double filterContoursMaxVertices = 1000000.0;
-		double filterContoursMinVertices = 15.0;
+		double filterContoursMinPerimeter = 20.0;
+		double filterContoursMinWidth = 20.0;
+		double filterContoursMaxWidth = 10000.0;
+		double filterContoursMinHeight = 20.0;
+		double filterContoursMaxHeight = 10000.0;
+		double[] filterContoursSolidity = {50.35971223021583, 100};
+		double filterContoursMaxVertices = 1.0E8;
+		double filterContoursMinVertices = 10.0;
 		double filterContoursMinRatio = 0.0;
-		double filterContoursMaxRatio = 1000.0;
+		double filterContoursMaxRatio = 10000.0;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
+
 	}
 
 	/**
@@ -90,6 +98,22 @@ public class BlueCargoTracking implements VisionPipeline {
 	 */
 	public Mat cvResizeOutput() {
 		return cvResizeOutput;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a HSV_Threshold.
+	 * @return Mat output from HSV_Threshold.
+	 */
+	public Mat hsvThresholdOutput() {
+		return hsvThresholdOutput;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a Mask.
+	 * @return Mat output from Mask.
+	 */
+	public Mat maskOutput() {
+		return maskOutput;
 	}
 
 	/**
@@ -106,14 +130,6 @@ public class BlueCargoTracking implements VisionPipeline {
 	 */
 	public Mat cvErodeOutput() {
 		return cvErodeOutput;
-	}
-
-	/**
-	 * This method is a generated getter for the output of a Mask.
-	 * @return Mat output from Mask.
-	 */
-	public Mat maskOutput() {
-		return maskOutput;
 	}
 
 	/**
@@ -148,6 +164,34 @@ public class BlueCargoTracking implements VisionPipeline {
 			dSize = new Size(0,0);
 		}
 		Imgproc.resize(src, dst, dSize, fx, fy, interpolation);
+	}
+
+	/**
+	 * Segment an image based on hue, saturation, and value ranges.
+	 *
+	 * @param input The image on which to perform the HSL threshold.
+	 * @param hue The min and max hue
+	 * @param sat The min and max saturation
+	 * @param val The min and max value
+	 * @param output The image in which to store the output.
+	 */
+	private void hsvThreshold(Mat input, double[] hue, double[] sat, double[] val,
+	    Mat out) {
+		Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2HSV);
+		Core.inRange(out, new Scalar(hue[0], sat[0], val[0]),
+			new Scalar(hue[1], sat[1], val[1]), out);
+	}
+
+	/**
+	 * Filter out an area of an image using a binary mask.
+	 * @param input The image on which the mask filters.
+	 * @param mask The binary image that is used to filter.
+	 * @param output The image in which to store the output.
+	 */
+	private void mask(Mat input, Mat mask, Mat output) {
+		mask.convertTo(mask, CvType.CV_8UC1);
+		Core.bitwise_xor(output, output, output);
+		input.copyTo(output, mask);
 	}
 
 	/**
@@ -187,18 +231,6 @@ public class BlueCargoTracking implements VisionPipeline {
 			borderValue = new Scalar(-1);
 		}
 		Imgproc.erode(src, dst, kernel, anchor, (int)iterations, borderType, borderValue);
-	}
-
-	/**
-	 * Filter out an area of an image using a binary mask.
-	 * @param input The image on which the mask filters.
-	 * @param mask The binary image that is used to filter.
-	 * @param output The image in which to store the output.
-	 */
-	private void mask(Mat input, Mat mask, Mat output) {
-		mask.convertTo(mask, CvType.CV_8UC1);
-		Core.bitwise_xor(output, output, output);
-		input.copyTo(output, mask);
 	}
 
 	/**
@@ -270,9 +302,10 @@ public class BlueCargoTracking implements VisionPipeline {
 			if (ratio < minRatio || ratio > maxRatio) continue;
 			output.add(contour);
 		}
-	
 	}
+
+
+
 
 }
 
-// End of BlueCargoTracking class
