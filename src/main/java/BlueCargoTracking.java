@@ -79,10 +79,10 @@ public class BlueCargoTracking implements VisionPipeline {
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
 		double filterContoursMinArea = 20.0;
 		double filterContoursMinPerimeter = 20.0;
-		double filterContoursMinWidth = 20.0;
-		double filterContoursMaxWidth = 100.0;
-		double filterContoursMinHeight = 20.0;
-		double filterContoursMaxHeight = 100.0;
+		double filterContoursMinWidth = 35.0;
+		double filterContoursMaxWidth = 150.0;
+		double filterContoursMinHeight = 35.0;
+		double filterContoursMaxHeight = 150.0;
 		double[] filterContoursSolidity = {50.35971223021583, 100};
 		double filterContoursMaxVertices = 1.0E8;
 		double filterContoursMinVertices = 10.0;
