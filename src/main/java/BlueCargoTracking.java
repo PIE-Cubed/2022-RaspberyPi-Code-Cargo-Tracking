@@ -1,6 +1,5 @@
 /**
  * Raspberry Pi Code for FRC Team 2199.
- * @author Alex and Allwyn Pereira
  */
 import edu.wpi.first.vision.VisionPipeline;
 
@@ -14,6 +13,9 @@ import org.opencv.imgproc.*;
  * BlueCargoTracking class
  * 
  * <p> An OpenCV pipeline generated with GRIP
+ * 
+ * @author Alex Pereira
+ * @author Allwyn Pereira
  */
 public class BlueCargoTracking implements VisionPipeline {
 
@@ -33,7 +35,8 @@ public class BlueCargoTracking implements VisionPipeline {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
-	@Override	public void process(Mat source0) {
+	@Override
+	public void process(Mat source0) {
 		// Step CV_resize0:
 		Mat cvResizeSrc = source0;
 		Size cvResizeDsize = new Size(0, 0);
@@ -304,8 +307,6 @@ public class BlueCargoTracking implements VisionPipeline {
 		}
 	}
 
-
-
-
 }
 
+// End of BlueCargoTracking Class

@@ -1,6 +1,5 @@
 /**
  * Raspberry Pi Code for FRC Team 2199.
- * @author Alex and Allwyn Pereira
  */
 //import java.io.FileWriter;
 //import java.io.BufferedWriter;
@@ -66,6 +65,14 @@ import org.opencv.imgproc.Imgproc;
    }
  */
 
+/**
+ * Main class
+ * 
+ * The main method of the Object Tracking algorithm
+ * 
+ * @author Alex Pereira
+ * @author Allwyn Pereira
+ */
 public final class Main {
   private static String configFile = "/boot/frc.json";
 

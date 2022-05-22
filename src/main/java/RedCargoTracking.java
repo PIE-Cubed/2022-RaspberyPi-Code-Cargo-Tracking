@@ -1,6 +1,5 @@
 /**
  * Raspberry Pi Code for FRC Team 2199.
- * @author Alex and Allwyn Pereira
  */
 import edu.wpi.first.vision.VisionPipeline;
 
@@ -14,6 +13,9 @@ import org.opencv.imgproc.*;
  * RedCargoTracking class
  * 
  * <p> An OpenCV pipeline generated with GRIP
+ * 
+ * @author Alex Pereira
+ * @author Allwyn Pereira
  */
 public class RedCargoTracking implements VisionPipeline {
 
@@ -347,8 +349,6 @@ public class RedCargoTracking implements VisionPipeline {
 		}
 	}
 
-
-
-
 }
 
+// End of RedCargoTracking Class
