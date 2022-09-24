@@ -56,7 +56,7 @@ public class RedCargoTracking implements VisionPipeline {
 
 		// Step HSV_Threshold1:
 		Mat hsvThreshold1Input = cvResizeOutput;
-		double[] hsvThreshold1Hue = {0.0, 35.63139931740615};
+		double[] hsvThreshold1Hue = {0.0, 19.588618568743048};
 		double[] hsvThreshold1Saturation = {133.00359712230215, 255.0};
 		double[] hsvThreshold1Value = {112.36510791366906, 255.0};
 		hsvThreshold(hsvThreshold1Input, hsvThreshold1Hue, hsvThreshold1Saturation, hsvThreshold1Value, hsvThreshold1Output);
@@ -74,8 +74,8 @@ public class RedCargoTracking implements VisionPipeline {
 
 		// Step RGB_Threshold0:
 		Mat rgbThresholdInput = maskOutput;
-		double[] rgbThresholdRed = {73.38129496402877, 255.0};
-		double[] rgbThresholdGreen = {0.0, 135};
+		double[] rgbThresholdRed = {71.08812949640287, 255.0};
+		double[] rgbThresholdGreen = {0.0, 124.45392491467575};
 		double[] rgbThresholdBlue = {0.0, 255.0};
 		rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
 
